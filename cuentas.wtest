@@ -1,0 +1,46 @@
+import cuentas.*
+
+describe "Tests de cuentas bancarias" {
+  test "Cuenta con gastos descuenta al depositar y extraer poco" {
+    cuentaConGastos.saldo(0)
+    cuentaConGastos.depositar(10000)
+    assert.equals(9800, cuentaConGastos.saldo())
+    cuentaConGastos.extraer(5000)
+    // 9800 - 5200 = 4600
+    assert.equals(4600, cuentaConGastos.saldo())
+  }
+
+  test "Cuenta con gastos descuenta porcentaje al extraer mucho" {
+    cuentaConGastos.saldo(0)
+    cuentaConGastos.depositar(30200) // queda en 30000
+    cuentaConGastos.extraer(20000)
+    // 20000 + 2% (400) = 20400. Saldo = 9600
+    assert.equals(9600, cuentaConGastos.saldo())
+  }
+
+  test "Cuenta combinada - DESAFIO" {
+    cuentaCorriente.saldo(30000)
+    cuentaConGastos.saldo(2000000)
+    cuentaCombinada.primaria(cuentaCorriente)
+    cuentaCombinada.secundaria(cuentaConGastos)
+
+    assert.equals(2030000, cuentaCombinada.saldo())
+    
+    cuentaCombinada.depositar(10000)
+    // Va a primaria. Corriente = 40000.
+    assert.equals(40000, cuentaCorriente.saldo())
+    
+    cuentaCombinada.extraer(5000)
+    // Sale de primaria. Corriente = 35000.
+    assert.equals(35000, cuentaCorriente.saldo())
+
+    cuentaCombinada.extraer(100000)
+    // DESAFÍO: Primaria tiene 35000, extrae 35000 y queda en 0.
+    // Falta extraer 65000 de secundaria.
+    // Costo extra = 65000 * 0.02 = 1300. Total restado = 66300.
+    // 2000000 - 66300 = 1933700.
+    assert.equals(0, cuentaCorriente.saldo())
+    assert.equals(1933700, cuentaConGastos.saldo())
+    assert.equals(1933700, cuentaCombinada.saldo())
+  }
+}

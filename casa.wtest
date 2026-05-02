@@ -1,0 +1,53 @@
+import casa.*
+import cosas.*
+import cuentas.*
+
+describe "Tests de la Casa de Pepe y Julian" {
+  method initialize() {
+    casa.cosas().clear()
+    cuentaCorriente.saldo(1000000)
+    casa.cuenta(cuentaCorriente)
+  }
+
+  test "Comprar heladera y asado afecta cantidad y derroche" {
+    casa.comprar(heladera)
+    casa.comprar(tiraDeAsado)
+    assert.equals(2, casa.cantidadDeCosasCompradas())
+    assert.that(casa.esDerrochona()) 
+    assert.that(casa.tieneComida())
+    assert.notThat(casa.vieneDeEquiparse())
+  }
+
+  test "Viene de equiparse si compramos cama al final" {
+    casa.comprar(tiraDeAsado)
+    casa.comprar(cama) 
+    assert.that(casa.vieneDeEquiparse())
+  }
+
+  test "Compra mas cara" {
+    casa.comprar(paqueteDeFideos)
+    casa.comprar(cama)
+    casa.comprar(plancha)
+    assert.equals(cama, casa.compraMasCara())
+  }
+
+  test "Electrodomesticos comprados" {
+    casa.comprar(heladera)
+    casa.comprar(cama)
+    casa.comprar(plancha)
+    assert.equals(#{heladera, plancha}, casa.electrodomesticosComprados().asSet())
+  }
+
+  test "Falta comida" {
+    casa.comprar(tiraDeAsado)
+    assert.that(casa.faltaComida())
+    casa.comprar(paqueteDeFideos)
+    assert.notThat(casa.faltaComida())
+  }
+
+  test "Que falta comprar" {
+    casa.comprar(cama)
+    const faltantes = casa.queFaltaComprar([heladera, cama, plancha])
+    assert.equals(#{heladera, plancha}, faltantes.asSet())
+  }
+}
