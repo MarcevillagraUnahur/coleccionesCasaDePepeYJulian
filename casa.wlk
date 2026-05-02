@@ -31,7 +31,9 @@ object casa {
     }
   }
 
-  method esDerrochona() = cosas.sum({ c => c.precio() }) >= 90000
+  method esDerrochona() = self.sumaDePrecioDeCosas() >= 90000
+
+  method sumaDePrecioDeCosas() = cosas.sum({ c => c.precio() })
 
   method compraMasCara() = cosas.max({ c => c.precio() })
 
@@ -39,7 +41,11 @@ object casa {
 
   method malaEpoca() = cosas.all({ c => c.esComida() })
 
-  method queFaltaComprar(lista) = lista.filter({ c => not cosas.contains(c) })
+  method fueComprada(cosa) = cosas.contains(cosa)
 
-  method faltaComida() = cosas.count({ c => c.esComida() }) < 2
+  method queFaltaComprar(lista) = lista.filter({ c => not self.fueComprada(c) })
+
+  method cantidadDeComidasCompradas() = cosas.count({ c => c.esComida() })
+
+  method faltaComida() = self.cantidadDeComidasCompradas() < 2
 }
