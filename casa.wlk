@@ -20,12 +20,14 @@ object casa {
 
   method tieneComida() = cosas.any({ c => c.esComida() })
 
+  method ultimaCosaComprada() = cosas.last()
+
   method vieneDeEquiparse() {
     if (cosas.isEmpty()) {
       return false
     } else {
-      const ultima = cosas.last()
-      return ultima.esElectrodomestico() or ultima.precio() > 50000
+      return self.ultimaCosaComprada().esElectrodomestico() 
+      or self.ultimaCosaComprada().precio() > 50000
     }
   }
 
