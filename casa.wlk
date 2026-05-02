@@ -23,9 +23,10 @@ object casa {
   method vieneDeEquiparse() {
     if (cosas.isEmpty()) {
       return false
+    } else {
+      const ultima = cosas.last()
+      return ultima.esElectrodomestico() or ultima.precio() > 50000
     }
-    const ultima = cosas.last()
-    return ultima.esElectrodomestico() or ultima.precio() > 50000
   }
 
   method esDerrochona() = cosas.sum({ c => c.precio() }) >= 90000
